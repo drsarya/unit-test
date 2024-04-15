@@ -1,9 +1,7 @@
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
-import java.io.File;
 import org.junit.jupiter.api.Test;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -33,7 +31,7 @@ public class ParserTextServiceTest {
         Не получилось сгенерировать текст по вашему запросу, попробуйте еще раз позже!
         """;
 
-    @DisplayName("")
+    @DisplayName("Проверка парсинга от GPT yandex")
     @Test
     void shouldReturnTextModelYandex() {
         ParserTextService parserTextService = mock(ParserTextService.class);
@@ -42,7 +40,7 @@ public class ParserTextServiceTest {
         assertEquals(parserTextService.parseFromGptYandex(text), testModel);
     }
 
-    @DisplayName("")
+    @DisplayName("Проверка парсинга от GPT yandex, генерация исключения")
     @Test
     void shouldThrowExceptionWhenParseYandex() {
         ParserTextService parserTextService = mock(ParserTextService.class);
@@ -50,30 +48,12 @@ public class ParserTextServiceTest {
         assertThrows(RuntimeException.class, () -> parserTextService.parseFromGptYandex(errorText));
     }
 
-    @DisplayName("")
+    @DisplayName("Тестирование соответствия текста промту")
     @Test
-    void shouldReturnTextModelGiga() {
+    void createPromptForGpt(){
         ParserTextService parserTextService = mock(ParserTextService.class);
-        TestModel testModel = new TestModel();
-        when(parserTextService.parseFromGptGiga(text)).thenReturn(testModel);
-        assertEquals(parserTextService.parseFromGptGiga(text), testModel);
+        String result = "Prompt";
+        when(parserTextService.createPrompt(0.1, "", "")).thenReturn(result);
+        assertEquals(parserTextService.createPrompt(0.1, "", ""), result);
     }
-
-    @DisplayName("")
-    @Test
-    void shouldThrowExceptionWhenParseGiga() {
-        ParserTextService parserTextService = mock(ParserTextService.class);
-        when(parserTextService.parseFromGptGiga(errorText)).thenThrow(new RuntimeException("Cannot parse text, please try again!"));
-        assertThrows(RuntimeException.class, () -> parserTextService.parseFromGptGiga(errorText));
-    }
-
-    @DisplayName("")
-    @Test
-    void createPromtForGpt(){
-        ParserTextService parserTextService = mock(ParserTextService.class);
-        String result = "Promt";
-        when(parserTextService.createPromt(0.1, "", "")).thenReturn(result);
-        assertEquals(parserTextService.createPromt(0.1, "", ""), result);
-    }
-
 }

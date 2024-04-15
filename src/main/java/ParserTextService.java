@@ -1,15 +1,10 @@
 public class ParserTextService {
-    public ParserTextService() {
-    }
-    public TestModel parseFromGptYandex(String gptAnswer){
+
+    public TestModel parseFromGptYandex(String gptAnswer) {
         return new TestModel();
     }
 
-    public TestModel parseFromGptGiga(String gptAnswer){
-        return new TestModel();
-    }
-
-    public String createPromt(Double temperature, String metrics, String text){
+    public String createPrompt(Double perCent, String metrics, String text) {
         return "";
     }
 }

@@ -15,7 +15,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 public class GeneratorServiceTest {
 
-    @DisplayName("Проверка файла, превышающего размер 1.5 мб, генерация исключения")
+    @DisplayName("Проверка загрузки файла, превышающего размер 1.5 мб, генерация исключения")
     @Test
     void testThrowException() {
         File testFile = new File("wrong_size.pdf");
@@ -24,7 +24,7 @@ public class GeneratorServiceTest {
         assertThrows(IllegalArgumentException.class, () -> generatorService.getTextFromFile(testFile));
     }
 
-    @DisplayName("Проверка файла, не превышающего размер 1.5 мб, парсинг без ошибок")
+    @DisplayName("Проверка загрузки файла, не превышающего размер 1.5 мб")
     @Test
     void testGetTextFromFile() {
         File testFile = new File("ok_size.pdf");
@@ -33,6 +33,26 @@ public class GeneratorServiceTest {
 
         assertDoesNotThrow(() -> generatorService.getTextFromFile(testFile));
         assertEquals("Text file with lecture", generatorService.getTextFromFile(testFile));
+    }
+
+    @DisplayName("Проверка загрузки файла, не превышающего 6000 символов")
+    @Test
+    void testGetTextFromFileValidLength() {
+        File testFile = new File("ok_length.pdf");
+        GeneratorService generatorService = mock(GeneratorService.class);
+        when(generatorService.getTextFromFile(any())).thenReturn("Text file with lecture");
+
+        assertDoesNotThrow(() -> generatorService.getTextFromFile(testFile));
+        assertEquals("Text file with lecture", generatorService.getTextFromFile(testFile));
+    }
+
+    @DisplayName("Проверка загрузки файла, превышающего 6000 символов, ошибка загрузки")
+    @Test
+    void testGetTextFromFileNotValidLength() {
+        File testFile = new File("wrong_length.pdf");
+        GeneratorService generatorService = mock(GeneratorService.class);
+        when(generatorService.getTextFromFile(any())).thenThrow(new IllegalArgumentException("File length exceeded!"));
+        assertThrows(IllegalArgumentException.class, () -> generatorService.getTextFromFile(testFile));
     }
 
     @DisplayName("Проверка файла с неверным расширением")
